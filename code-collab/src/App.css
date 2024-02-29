@@ -2,3 +2,11 @@
     margin: 0;
     padding: 0;
 }
+.btn.btn-outline-success:hover {
+    background-color: inherit;
+    color: inherit;
+    border-color: inherit;
+  }
+  .btn.btn-outline-success {
+    padding-bottom: 20px; /* Adjust the padding values as needed */
+  }
