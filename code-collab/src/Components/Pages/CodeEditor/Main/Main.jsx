@@ -1,13 +1,23 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import CodeEditor from '../CodeEditor'
 import { useParams } from 'react-router-dom'
 
 const Main = () => {
   const {id} = useParams();
-  localStorage.setItem(id , `main${id}`);
+  
+  // useEffect(()=> {
+  //   const data = localStorage.getItem(`main${id}`);
+  //   if (data) {
+  //     const parsedData = JSON.parse(data);
+  //     localStorage.setItem("value" , parsedData);
+  //   }
+  //   localStorage.setItem('value' , id);
+  // } , [id ]);
+
+
   return (
     <>
-      <CodeEditor/>
+      <CodeEditor />
 
     </>
   )

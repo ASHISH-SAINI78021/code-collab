@@ -16,7 +16,7 @@ const Nav = ({onClick , editorRef}) => {
     <Space.Compact block>
         {
             files?.map((file , index)=> {
-                return <Button key={index} onClick={()=> navigate(`/main/${index}`)}>{file}</Button>   
+                return <Button key={index + 1} onClick={()=> navigate(`/main/${index + 1}`)}>{file}</Button>   
             })
         }
       

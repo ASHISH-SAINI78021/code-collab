@@ -7,15 +7,25 @@ import Output from "./Output";
 import DarkMode from "./DarkMode";
 import LightMode from "./LightMode";
 import Nav from "./Nav/Nav";
-import { files } from "../helper/constant";
+import { useAuth } from "../../context/auth";
+import { initSocket } from "../helper/socket";
+import { ACTIONS } from "../helper/action";
+import { useLocation , Navigate, useParams, useNavigate} from "react-router-dom";
+import toast from "react-hot-toast";
+
+
 
 const CodeEditor = () => {
   const [value, setvalue] = useState(CODE_SNIPPETS["javascript"]);
   const [language, setlanguage] = useState("javascript");
-  const [input , setinput] = useState(null);
   const [state, setstate] = useState(false);
-  const [local , setlocal] = useState();
   const editorRef = useRef();
+  const socketRef = useRef(null);
+  const [clients , setclients] = useState([]);
+  const [auth , setauth] = useAuth();
+  const location = useLocation();
+  const navigation = useNavigate();
+  const {id} = useParams();
 
   const onMount = (editor) => {
     editorRef.current = editor;
@@ -44,15 +54,54 @@ const CodeEditor = () => {
   const darkmode = () => {
     setstate(!state);
   };
-
   // useEffect(()=> {
   //   files?.map((file , index)=> {
-  //     const data = localStorage.getItem()
-  //     if (){
-  //       localStorage.setItem(file , value);
-  //     }
+  //     localStorage.setItem(file , value);  
   // })
+  // } , []);
+
+  // useEffect(()=> {
+  //   const id = localStorage.getItem("value");
+  //   if (id) {
+  //     const parsedData = JSON.parse(id);
+  //     localStorage.setItem(`Main${parsedData}.jsx` , value);
+  //   }
   // } , [value]);
+
+  useEffect(()=> {
+    const init = async ()=> {
+      socketRef.current = await initSocket();
+      socketRef.current.on('connect_error' , (err)=> {handleErrors(err)}); // if error occur
+      socketRef.current.on('connect_failed' , (err)=> {handleErrors(err)}); // if connection failed
+
+      function handleErrors(err){
+        console.log("socket error" , err);
+        toast.error("Socket connection failed try again later");
+      }
+      socketRef.current.emit(ACTIONS.JOIN , {
+        roomId : id , 
+        username : location?.state?.username
+      })
+    }
+
+    // listening for the joined event
+    // socketRef.current.on(ACTIONS.JOINED , ({clients , username , socketId})=> {
+    //   if (username !== location?.state?.username){
+    //     toast.success(`${username} joined the room`);
+    //     console.log(`${username} joined the room`);
+    //   }
+      
+    // })
+
+    console.log(clients);
+    init();
+  } , []);
+
+  if (!location.state){
+    return <Navigate/>
+  }
+
+
   return (
     <Layout2>
       <div className="d-flex gap-5 justify-content-center">
@@ -78,7 +127,6 @@ const CodeEditor = () => {
         />
         <div >
           <Output editorRef={editorRef} language={language} />
-            
         </div>
       </div>
     </Layout2>
