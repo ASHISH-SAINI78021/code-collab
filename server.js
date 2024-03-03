@@ -23,28 +23,51 @@ const getAllConnectedClients = (roomId)=> {
             username : userSocketMap[socketId]
         }
     })
-}
-io.on("connection" , (socket)=> {
-    console.log("socket-id" , socket.id);
+} 
 
-    // it will listen the event from the frontend side
-    socket.on(ACTIONS.JOIN , ({roomId , username})=> {
+io.on("connection", (socket) => {
+    console.log("socket-id", socket.id);
+
+    socket.on(ACTIONS.JOIN, ({ roomId, username }) => {
         userSocketMap[socket.id] = username;
-        socket.join(roomId); // in this step we join the socket into the room
+        socket.join(roomId);
 
         const clients = getAllConnectedClients(roomId);
-        // it will get all the clients list
-        // console.log(clients);
+        console.log(clients);
 
-        clients.forEach((socketId)=> {
-            io.to(socketId).emit(ACTIONS.JOINED , {
-                clients , username , 
-                socketId : socket.id // we will send the socket id of current client joined to all members in client list
-            })
-        })
-        
-    })
+        clients.forEach(({ socketId }) => {
+            io.to(socketId).emit(ACTIONS.JOINED, {
+                clients,
+                username,
+                socketId: socket.id
+            });
+        });
+    });
+
+     // change code
+     socket.on(ACTIONS.CODE_CHANGE, ({ roomId, code }) => {
+        console.log(`Received CODE_CHANGE for roomId ${roomId}`);
+        console.log(`Code received: ${code}`);
+        socket.in(roomId).emit(ACTIONS.CODE_CHANGE, { code });
+    });
+
+    // when user wants to disconnect but not disconnected yet
+    socket.on("disconnecting", () => {
+        const rooms = [...socket.rooms];
+        rooms.forEach((roomId) => {
+            socket.in(roomId).emit(ACTIONS.DISCONNECTED, {
+                socketId: socket.id,
+                username: userSocketMap[socket.id]
+            });
+        });
+        delete userSocketMap[socket.id];
+        socket.leave();
+    });
+
+   
 });
+
+
 
 server.listen(PORT , ()=> {
     console.log("connected to socket..");

@@ -3,10 +3,10 @@ import React, { useEffect, useState } from "react";
 import styles from "./User.module.css";
 import {v4 as uuidv4} from "uuid";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const User = () => {
-  const [roomid, setroomid] = useState(null);
+  const [roomid, setroomid] = useState("");
   const [username, setusername] = useState("");
   const navigate = useNavigate();
 
@@ -17,14 +17,16 @@ const User = () => {
       return ;
     }
     toast.success("Created new room successfuly");
+    localStorage.setItem("user" , username);
     navigate(`/user/${roomid}` , {
       state : username
     });
   }
-  useEffect(()=> {
+
+  const handleCreateId = ()=> {
     const id = uuidv4();
     setroomid(id);
-  } , []);
+  }
   return (
     <div className="d-flex justify-content-center align-items-center">
       <div className={styles.loginContainer}>
@@ -38,11 +40,10 @@ const User = () => {
               type="roomid"
               id="roomid"
               value={roomid}
-              onChange={(e)=> setroomid()}
+              onChange={(e)=> setroomid(e.target.value)}
               name="roomid"
               placeholder="Your room id"
               className={styles.input}
-              disabled
             />
           </div>
 
@@ -61,10 +62,13 @@ const User = () => {
             />
           </div>
 
-          <div className={styles.inputGroup}>
+          <div className={styles.buttonGroup}>
             <button type="submit" className={styles.button}>
               Create Room
             </button>
+            <Link onClick={handleCreateId} className={styles.button}>
+              Create new id
+            </Link>
           </div>
         </form>
       </div>

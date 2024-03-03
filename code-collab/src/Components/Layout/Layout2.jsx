@@ -75,7 +75,6 @@ const Layout2 = ({children}) => {
               margin: '16px 0',
             }}
           >
-            <Client/>
           </Breadcrumb>
           <Content
             style={{

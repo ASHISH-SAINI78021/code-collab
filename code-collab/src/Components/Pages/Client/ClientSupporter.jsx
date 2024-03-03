@@ -1,8 +1,9 @@
 import { AntDesignOutlined, UserOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
 import { Avatar, Divider, Tooltip } from 'antd';
-const ClientSupporter = () => {
+const ClientSupporter = ({clients}) => {
 
+  console.log(clients);
 
   return (
   <>
@@ -16,28 +17,23 @@ const ClientSupporter = () => {
         cursor: 'pointer',
       }}
     >
-      <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-      <Avatar
-        style={{
-          backgroundColor: '#f56a00',
-        }}
-      >
-        K
-      </Avatar>
-      <Tooltip title="Ant User" placement="top">
-        <Avatar
-          style={{
-            backgroundColor: '#87d068',
-          }}
-          icon={<UserOutlined />}
-        />
-      </Tooltip>
-      <Avatar
-        style={{
-          backgroundColor: '#1677ff',
-        }}
-        icon={<AntDesignOutlined />}
-      />
+     
+      {
+        clients?.map((user)=> {
+          return <>
+              <Tooltip title={user.username} placement="top">
+            <Avatar
+              style={{
+                backgroundColor: '#87d068',
+              }}
+              icon={<UserOutlined />}
+            />
+          </Tooltip>
+          </>
+        })
+      }
+     
+      
     </Avatar.Group>
     
   </>

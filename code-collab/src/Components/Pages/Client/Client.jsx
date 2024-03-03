@@ -3,14 +3,14 @@ import ClientSupporter from "./ClientSupporter";
 import styles from "./Client.module.css";
 import ModalSupporter from "./ModalSupporter";
 
-const Client = () => {
+const Client = ({clients}) => {
     
   return (
     <div className={styles.container}>
       <div>
         <span>Connected : </span>
         <span>
-          <ClientSupporter />
+          <ClientSupporter clients={clients} />
         </span>
       </div>
      
