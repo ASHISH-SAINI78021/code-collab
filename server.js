@@ -44,12 +44,26 @@ io.on("connection", (socket) => {
         });
     });
 
+    // change language 
+    socket.on(ACTIONS.LANGUAGE_CHANGE , ({roomId , language})=> {
+        console.log(`Received LANGUAGE_CHANGE for roomId ${roomId}, language: ${language}`);
+        socket.in(roomId).emit(ACTIONS.LANGUAGE_CHANGE , {language});
+    })
+
+    // sync code 
+    socket.on(ACTIONS.SYNC_CODE , ({socketId , code})=> {
+        console.log("I am listening it ");
+        io.to(socketId).emit(ACTIONS.SYNC_CODE , {code});
+    })
+
      // change code
      socket.on(ACTIONS.CODE_CHANGE, ({ roomId, code }) => {
-        console.log(`Received CODE_CHANGE for roomId ${roomId}`);
-        console.log(`Code received: ${code}`);
+        // console.log(`Received CODE_CHANGE for roomId ${roomId}`);
+        // console.log(`Code received: ${code}`);
         socket.in(roomId).emit(ACTIONS.CODE_CHANGE, { code });
     });
+
+    
 
     // when user wants to disconnect but not disconnected yet
     socket.on("disconnecting", () => {

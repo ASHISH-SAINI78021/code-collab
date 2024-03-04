@@ -23,15 +23,14 @@ const CodeEditor = () => {
   const [value, setvalue] = useState(CODE_SNIPPETS["javascript"]);
   const [language, setlanguage] = useState("javascript");
   const [state, setstate] = useState(false);
-  const [isLocalChange, setIsLocalChange] = useState(true);
   const editorRef = useRef();
+  const codeRef = useRef(null);
   const socketRef = useRef(null);
   const [Clients, setclients] = useState([]);
-  const [auth, setauth] = useAuth();
+  const [editorKey , seteditorKey] = useState(1);
   const location = useLocation();
   const navigation = useNavigate();
   const { id } = useParams();
-  const roomId = id;
 
   const onSelect = (lang) => {
     setlanguage(lang);
@@ -98,8 +97,18 @@ const CodeEditor = () => {
             console.log(`${username} joined the room`);
           }
           setclients(clients);
+
+          socketRef?.current.emit(ACTIONS.SYNC_CODE , {
+            code : codeRef.current , 
+            socketId
+          })
+
+
         }
       );
+
+
+      
 
       // listening the disconnected event
       socketRef.current?.on(ACTIONS.DISCONNECTED, ({ socketId, username }) => {
@@ -108,18 +117,6 @@ const CodeEditor = () => {
           return prev.filter((client) => client.socketId !== socketId);
         });
       });
-
-
-       // syncing the code
-       editorRef.current?.onDidChangeModelContent(() => {
-        const code = editorRef.current.getValue();
-        
-        socketRef.current?.emit(ACTIONS.CODE_CHANGE, {
-          roomId,
-          code,
-        });
-      });
-
      
     };
 
@@ -133,20 +130,98 @@ const CodeEditor = () => {
       socketRef.current?.off(ACTIONS.DISCONNECTED); // off() -> it is used to clear the event from the memory
       socketRef.current?.disconnect();
     };
-  }, [value]);
+  }, []);
+
+
+
+
 
   useEffect(() => {
-    // listening code change event from the server
-    socketRef.current?.on(ACTIONS.CODE_CHANGE, ({ code }) => {
-      console.log("hi");
-      if (code !== null) {
-        // Assuming setvalue is the state updater function
-        // editorRef.current.setValue(code);
-        setvalue(code);
-      }
-    });
-  }, [value]);
+    const init = () => {
+      editorRef.current?.onDidChangeModelContent(() => {
+        const code = editorRef.current.getValue();
+        // console.log('Code changed:', code);
+        codeRef.current = code;
+        if (origin !== 'setValue'){
+          socketRef.current?.emit(ACTIONS.CODE_CHANGE , {
+            roomId : id ,
+            code
+          })
+        }
+
+
+        
+      });
+
+    };
   
+    init();
+  }, [editorRef?.current]);
+
+  useEffect(()=> {
+    const init = ()=> {
+      socketRef.current?.on(ACTIONS.SYNC_CODE, ({ code }) => {
+        console.log('Syncing code...', code);
+        setvalue(code);
+        
+      });
+    }
+    init();
+  } , [socketRef.current])
+
+
+  
+
+  useEffect(()=> {
+    if (socketRef.current){
+      socketRef?.current?.on(ACTIONS.CODE_CHANGE , ({code})=> {
+        console.log('receiving...' , code);
+        if (code !== null){
+            setvalue(code);
+        }
+      })
+    }
+  } , [socketRef?.current])
+
+
+  // this is for language change 
+  useEffect(() => {
+    const handleLanguageChange = async () => {
+      console.log(`Language changed to ${language}`);
+  
+      // Update the language and value state
+      setlanguage(language);
+      setvalue(CODE_SNIPPETS[language]);
+      seteditorKey((prev)=> prev + 1);
+  
+      // Emit a language change event to the server
+      socketRef.current?.emit(ACTIONS.LANGUAGE_CHANGE, {
+        roomId: id,
+        language: language
+      });
+    };
+  
+    // Call handleLanguageChange when language changes
+    handleLanguageChange();
+  
+  }, [language, id, socketRef]);
+  
+
+
+
+// Listening for the event on the client side
+useEffect(() => {
+  const init = async () => {
+      socketRef.current?.on(ACTIONS.LANGUAGE_CHANGE, ({ language }) => {
+          console.log("HI");
+          setlanguage(language);
+          setvalue(CODE_SNIPPETS[language]);
+      });
+  }
+
+  init();
+}, []);
+
 
   if (!location.state) {
     return <Navigate />;
@@ -157,12 +232,20 @@ const CodeEditor = () => {
     editor.focus(); // it means that editor is ready to accept user input and cursor is placed inside the editor for typing
   };
 
+
+  // useEffect(()=> {
+  //   const init = async ()=> {
+      
+  //   }
+
+  //   init();
+  // } , [socketRef.current]);
   
 
 
   return (
     <Layout2>
-      <Client clients={Clients} />
+      <Client clients={Clients} roomId={id}/>
       <div className="d-flex gap-5 justify-content-center">
         <LanguageSelector language={language} onSelect={onSelect} />
         {!state ? (
@@ -174,6 +257,7 @@ const CodeEditor = () => {
       <Nav onClick={downloadCode} editorRef={editorRef} />
       <div className="d-flex gap-2 ">
         <Editor
+          key={editorKey}
           height="70vh"
           width={"70%"}
           theme={!state ? "" : "vs-dark"}
