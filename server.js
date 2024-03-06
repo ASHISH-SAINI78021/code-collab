@@ -52,13 +52,6 @@ io.on("connection", (socket) => {
     });
   });
 
-
-  // // change language
-  // socket.on(ACTIONS.LANGUAGE_CHANGE, ({ roomId, language }) => {
-  //   console.log(`Received LANGUAGE_CHANGE for roomId ${roomId}, language: ${language}`);
-  //   io.in(roomId).emit(ACTIONS.LANGUAGE_CHANGE, { language });
-  // });
-
   // sync code
   socket.on(ACTIONS.SYNC_CODE, ({ socketId, code }) => {
     console.log("I am listening it ");

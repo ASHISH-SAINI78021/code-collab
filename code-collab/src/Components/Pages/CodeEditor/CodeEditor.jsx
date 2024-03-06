@@ -143,7 +143,7 @@ const CodeEditor = () => {
         roomId: id,
         code,
       });
-    }, 500); // Adjust the throttle delay as needed
+    }, 1000); // Adjust the throttle delay as needed
   
     editorRef.current?.onDidChangeModelContent(() => {
       const code = editorRef.current.getValue();
@@ -179,42 +179,6 @@ const CodeEditor = () => {
       });
     }
   }, [socketRef?.current]);
-
-
-  // useEffect(() => {
-  //   const handleLanguageChange = async () => {
-  //     console.log(`Language changed to ${language}`);
-  
-  //     // Update the language and value state
-  //     setlanguage(language);
-  //     setvalue(CODE_SNIPPETS[language]);
-  //     seteditorKey((prev) => prev + 1);
-  
-  //     // Emit a language change event to the server
-  //     socketRef.current?.emit(ACTIONS.LANGUAGE_CHANGE, {
-  //       roomId: id,
-  //       language: language,
-  //     });
-  //   };
-  
-  //   // Call handleLanguageChange when language changes
-  //   handleLanguageChange();
-  // }, [language, id, socketRef]);
-  
-  // // Listening for the event on the client side
-  // useEffect(() => {
-  //   const init = async () => {
-  //     socketRef.current?.on(ACTIONS.LANGUAGE_CHANGE, ({ language }) => {
-  //       console.log(`Received LANGUAGE_CHANGE for roomId ${id}, language: ${language}`);
-  
-  //       // Update the language and value state
-  //       setlanguage(language);
-  //       setvalue(CODE_SNIPPETS[language]);
-  //     });
-  //   };
-  
-  //   init();
-  // }, [id]);
 
 
   if (!location.state) {
