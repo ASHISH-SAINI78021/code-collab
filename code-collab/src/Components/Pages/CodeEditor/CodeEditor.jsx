@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { throttle } from 'lodash';
 import Editor from "@monaco-editor/react";
 import Layout2 from "../../Layout/Layout2";
 import LanguageSelector from "./LanguageSelector";
@@ -10,7 +11,7 @@ import Nav from "./Nav/Nav";
 import { useAuth } from "../../context/auth";
 import { initSocket } from "../helper/socket";
 import { ACTIONS } from "../helper/action";
-import { throttle } from 'lodash';
+
 import {
   useLocation,
   Navigate,
@@ -90,23 +91,19 @@ const CodeEditor = () => {
       // setclients((prevClients)=> [...prevClients , localStorage.getItem("user")]);
 
       // listening for the joined event
-      socketRef.current?.on(
-        ACTIONS.JOINED,
-        ({ clients, username, socketId }) => {
-          if (username !== localStorage.getItem("user")) {
-            toast.success(`${username} joined the room`);
-            console.log(`${username} joined the room`);
-          }
-          setclients(clients);
-
-          socketRef?.current.emit(ACTIONS.SYNC_CODE , {
-            code : codeRef.current , 
-            socketId
-          })
-
-
+      socketRef.current?.on(ACTIONS.JOINED, ({ clients, username, socketId }) => {
+        if (username !== localStorage.getItem("user")) {
+          toast.success(`${username} joined the room`);
+          console.log(`${username} joined the room`);
         }
-      );
+        setclients(clients);
+      
+        const currentCode = editorRef.current.getValue();
+        socketRef?.current.emit(ACTIONS.SYNC_CODE, {
+          code: currentCode,
+          socketId,
+        });
+      });
 
 
       
@@ -133,9 +130,7 @@ const CodeEditor = () => {
     };
   }, []);
 
-
-
-
+  
 
   useEffect(() => {
     const handleCodeChange = throttle((code) => {
@@ -143,7 +138,7 @@ const CodeEditor = () => {
         roomId: id,
         code,
       });
-    }, 1000); // Adjust the throttle delay as needed
+    }, 5000);
   
     editorRef.current?.onDidChangeModelContent(() => {
       const code = editorRef.current.getValue();
@@ -154,7 +149,9 @@ const CodeEditor = () => {
       }
     });
   }, [editorRef?.current, origin, id, socketRef]);
-
+  
+  
+  
   useEffect(()=> {
     const init = ()=> {
       socketRef.current?.on(ACTIONS.SYNC_CODE, ({ code }) => {
