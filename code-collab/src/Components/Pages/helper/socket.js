@@ -9,5 +9,5 @@ export const initSocket = async () => {
     'transports': ['websocket']
   };
 
-  return io("http://localhost:5000/", options);
+  return io("https://code-collab-1.onrender.com", options);
 };
