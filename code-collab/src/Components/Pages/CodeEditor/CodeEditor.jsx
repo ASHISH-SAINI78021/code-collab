@@ -10,6 +10,7 @@ import Nav from "./Nav/Nav";
 import { useAuth } from "../../context/auth";
 import { initSocket } from "../helper/socket";
 import { ACTIONS } from "../helper/action";
+import { throttle } from 'lodash';
 import {
   useLocation,
   Navigate,
@@ -137,26 +138,22 @@ const CodeEditor = () => {
 
 
   useEffect(() => {
-    const init = () => {
-      editorRef.current?.onDidChangeModelContent(() => {
-        const code = editorRef.current.getValue();
-        // console.log('Code changed:', code);
-        codeRef.current = code;
-        if (origin !== 'setValue'){
-          socketRef.current?.emit(ACTIONS.CODE_CHANGE , {
-            roomId : id ,
-            code
-          })
-        }
-
-
-        
+    const handleCodeChange = throttle((code) => {
+      socketRef.current?.emit(ACTIONS.CODE_CHANGE, {
+        roomId: id,
+        code,
       });
-
-    };
+    }, 500); // Adjust the throttle delay as needed
   
-    init();
-  }, [editorRef?.current]);
+    editorRef.current?.onDidChangeModelContent(() => {
+      const code = editorRef.current.getValue();
+      codeRef.current = code;
+  
+      if (origin !== 'setValue') {
+        handleCodeChange(code);
+      }
+    });
+  }, [editorRef?.current, origin, id, socketRef]);
 
   useEffect(()=> {
     const init = ()=> {
@@ -172,55 +169,52 @@ const CodeEditor = () => {
 
   
 
-  useEffect(()=> {
-    if (socketRef.current){
-      socketRef?.current?.on(ACTIONS.CODE_CHANGE , ({code})=> {
-        console.log('receiving...' , code);
-        if (code !== null){
-            setvalue(code);
-        }
-      })
-    }
-  } , [socketRef?.current])
-
-
-  // this is for language change 
   useEffect(() => {
-    const handleLanguageChange = async () => {
-      console.log(`Language changed to ${language}`);
-  
-      // Update the language and value state
-      setlanguage(language);
-      setvalue(CODE_SNIPPETS[language]);
-      seteditorKey((prev)=> prev + 1);
-  
-      // Emit a language change event to the server
-      socketRef.current?.emit(ACTIONS.LANGUAGE_CHANGE, {
-        roomId: id,
-        language: language
+    if (socketRef.current) {
+      socketRef?.current?.on(ACTIONS.CODE_CHANGE, ({ code }) => {
+        console.log('Receiving code change...', code);
+        if (code !== null && code !== editorRef.current?.getValue()) {
+          setvalue(code);
+        }
       });
-    };
+    }
+  }, [socketRef?.current]);
+
+
+  // useEffect(() => {
+  //   const handleLanguageChange = async () => {
+  //     console.log(`Language changed to ${language}`);
   
-    // Call handleLanguageChange when language changes
-    handleLanguageChange();
+  //     // Update the language and value state
+  //     setlanguage(language);
+  //     setvalue(CODE_SNIPPETS[language]);
+  //     seteditorKey((prev) => prev + 1);
   
-  }, [language, id, socketRef]);
+  //     // Emit a language change event to the server
+  //     socketRef.current?.emit(ACTIONS.LANGUAGE_CHANGE, {
+  //       roomId: id,
+  //       language: language,
+  //     });
+  //   };
   
-
-
-
-// Listening for the event on the client side
-useEffect(() => {
-  const init = async () => {
-      socketRef.current?.on(ACTIONS.LANGUAGE_CHANGE, ({ language }) => {
-          console.log("HI");
-          setlanguage(language);
-          setvalue(CODE_SNIPPETS[language]);
-      });
-  }
-
-  init();
-}, []);
+  //   // Call handleLanguageChange when language changes
+  //   handleLanguageChange();
+  // }, [language, id, socketRef]);
+  
+  // // Listening for the event on the client side
+  // useEffect(() => {
+  //   const init = async () => {
+  //     socketRef.current?.on(ACTIONS.LANGUAGE_CHANGE, ({ language }) => {
+  //       console.log(`Received LANGUAGE_CHANGE for roomId ${id}, language: ${language}`);
+  
+  //       // Update the language and value state
+  //       setlanguage(language);
+  //       setvalue(CODE_SNIPPETS[language]);
+  //     });
+  //   };
+  
+  //   init();
+  // }, [id]);
 
 
   if (!location.state) {

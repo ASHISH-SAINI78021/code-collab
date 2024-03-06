@@ -44,6 +44,7 @@ const User = () => {
               name="roomid"
               placeholder="Your room id"
               className={styles.input}
+              required
             />
           </div>
 
@@ -59,6 +60,7 @@ const User = () => {
               name="username"
               className={styles.input}
               placeholder="Your username"
+              required
             />
           </div>
 

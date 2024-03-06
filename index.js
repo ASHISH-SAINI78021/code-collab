@@ -3,6 +3,7 @@ const express = require("express");
 const colors = require("colors");
 const dotenv = require("dotenv").config();
 const morgan = require("morgan");
+const path = require("path");
 const cors = require("cors");
 
 
@@ -15,6 +16,11 @@ const main = require("./config.js/db.js");
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(cors());
+app.use(express.static(path.join(__dirname , "./code-collab/dist/")));
+
+app.use("*" , (req , res , next)=> {
+    res.sendFile(path.join(__dirname , "./client/code-collab/index.html"));
+})
 
 
 main()
