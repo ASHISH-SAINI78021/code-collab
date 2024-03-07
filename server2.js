@@ -1,44 +1,32 @@
 const express = require("express");
+const http = require("http");
+const { Server } = require("socket.io");
+const ACTIONS = require("./helper/action.js");
 const app = express();
 
-const server = require("http").createServer(app);
-const {Server} = require("socket.io");
+const server = http.createServer(app);
+const io = new Server(server);
 
-const io = new Server(server, {
-    cors: {
-      origin: "*",
-    },
+const PORT = 3000;
+
+// make a connection
+// it is establishing a connection
+io.on("connection", (socket) => {
+  console.log("socket-id", socket.id);
+
+ // In server code
+socket.on(ACTIONS.CHAT_MESSAGE, ({ roomId, message, username }) => {
+    // Broadcast the chat message to all clients in the room
+    io.in(roomId).emit(ACTIONS.CHAT_MESSAGE, { message, username });
   });
+  
 
+//   // disconnecting
+//   socket.on("disconnect", () => {
+//     console.log("User disconnected: ", socket.id);
+//   });
+});
 
-app.get("/", (req, res)=>{
-    res.send("loljjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
-})
-
-let roomIdGlobal,imgURLGlobal;
-io.on("connection" , (socket) => {
-    socket.on("userJoined",(data)=>{
-        const {name , userId , roomId,host , presenter}= data;
-        roomIdGlobal = roomId;
-        socket.join(roomId);
-        socket.emit("userIsJoined", {success : true});
-        socket.broadcast.to(roomIdGlobal).emit("whiteboardDataResponse",{
-            imgURL : data.imgURL
-        });
-    });
-
-    socket.on("whiteboardData",(data)=>{
-        imgURLGlobal = data.imgURL;
-        socket.broadcast.to(roomIdGlobal).emit("whiteboardDataResponse",{
-            imgURL : data.imgURL
-        });
-        
-
-    })
-
-
-})
-
-
-const port = process.env.PORT || 5000;
-server.listen(port, ()=>console.log("server is running on https://localhost:5000"));
+server.listen(PORT, () => {
+  console.log("connected to socket2...");
+});

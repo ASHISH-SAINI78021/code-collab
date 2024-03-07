@@ -23,6 +23,10 @@ const Button2 = ({ editorRef, language , input }) => {
     }, 2000);
   };
 
+  const clear = ()=> {
+    setOutput(null);
+  }
+
   const executeCode = async () => {
     const sourceCode = editorRef.current.getValue();
     if (!sourceCode) {
@@ -75,8 +79,11 @@ const Button2 = ({ editorRef, language , input }) => {
       >
         Run
       </Button>
+      <span>    </span>
+      
+      <Button className='btn btn-outline-primary' onClick={clear}>Clear</Button>
       <br /><br />
-      <p>
+      <p style={{maxHeight: "30vh" , overflowY:"auto"}}>
         {output ? 
           output?.map((value, index) => <p key={index}>{value}</p>) : 
           "Click 'Run' to see the output"

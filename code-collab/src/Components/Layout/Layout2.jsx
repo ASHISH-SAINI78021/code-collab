@@ -2,6 +2,8 @@ import React from 'react';
 import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import Client from '../Pages/Client/Client';
+import { useNavigate } from 'react-router-dom';
+import GroupChat from '../Pages/GroupChat/GroupChat';
 const { Header, Content, Sider } = Layout;
 const items1 = ['1', '2', '3'].map((key) => ({
   key,
@@ -26,6 +28,13 @@ const Layout2 = ({children}) => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  const navigate = useNavigate();
+  const handleLogout = ()=> {
+    localStorage.removeItem("auth");
+    localStorage.removeItem("user");
+    navigate("/");
+  }
   return (
     <Layout>
       <Header
@@ -75,6 +84,8 @@ const Layout2 = ({children}) => {
               margin: '16px 0',
             }}
           >
+          <button className='btn btn-danger' onClick={handleLogout}>Logout</button>
+          <GroupChat/>
           </Breadcrumb>
           <Content
             style={{

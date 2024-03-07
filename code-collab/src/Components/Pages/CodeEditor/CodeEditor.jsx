@@ -138,7 +138,7 @@ const CodeEditor = () => {
         roomId: id,
         code,
       });
-    }, 5000);
+    }, 10000);
   
     editorRef.current?.onDidChangeModelContent(() => {
       const code = editorRef.current.getValue();
