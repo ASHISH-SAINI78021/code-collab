@@ -50,9 +50,8 @@ const SignupSupport = () => {
             response = await response.json();
             console.log(response);
             if (response.success){
-              
               toast.success("Signup successfuly");
-              navigate("/login");
+              navigate("/"); // go to login page
             }
             else {
               toast.success("User is already registered");
@@ -93,7 +92,7 @@ const SignupSupport = () => {
             <Button type="primary" className={styles.signupButton} onClick={handleSubmit}>Sign Up</Button>
         </Form.Item>
         <Form.Item {...buttonItemLayout}>
-            <Button type="primary" className={styles.loginButton} onClick={()=> navigate("/login")}>Login</Button>
+            <Button type="primary" className={styles.loginButton} onClick={()=> navigate("/")}>Login</Button>
         </Form.Item>
       <div className={styles.buttonContainer}>
         <div className={styles.buttonContainerItem}></div>
