@@ -6,9 +6,11 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+.env
 
 node_modules
 dist
+.env
 dist-ssr
 *.local
 
@@ -21,5 +23,5 @@ dist-ssr
 *.ntvs*
 *.njsproj
 *.sln
-.env
+
 *.sw?
