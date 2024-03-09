@@ -16,7 +16,7 @@ const Spinner = ({page}) => {
             navigate(-1);
         }
         else if (count == 0 && !page) {
-            navigate("/login" , {
+            navigate("/" , {
                 history : location.pathname
             });
         }

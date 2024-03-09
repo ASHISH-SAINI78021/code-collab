@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import GroupChat from '../Pages/GroupChat/GroupChat';
 const { Header, Content, Sider } = Layout;
 import toast from "react-hot-toast";
+import { useAuth } from '../context/auth';
 const items1 = ['1', '2', '3'].map((key) => ({
   key,
   label: `nav ${key}`,
@@ -31,10 +32,14 @@ const Layout2 = ({children}) => {
   } = theme.useToken();
 
   const navigate = useNavigate();
+  const [auth , setauth] = useAuth();
   const handleLogout = ()=> {
     localStorage.removeItem("auth");
     toast.success("successfuly logged out");
     localStorage.removeItem("user");
+    setauth({
+      ...auth , user : null , token: ""
+    })
     navigate("/");
   }
   return (

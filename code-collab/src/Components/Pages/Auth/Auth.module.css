@@ -1,13 +1,28 @@
 .login{
     display: flex;
+    height: 100vh;
     justify-content: center;
     align-items: center;
-    max-height: 100vw;
-    width: 100vw;
-    height: 100vh;
-    background-image: url("login.jpg");
-    background-size: cover;
+    gap: 40px;
+    background-color: #111;
+    padding: 3rem;
 }
+.container1{
+    width: 50%;
+}
+.container2{
+    width: 50%;
+    display: flex;
+}
+.inputfield{
+    width: 100%;
+    border-radius: 1.5rem;
+    background-color: #1fcec237;
+    border: 1px solid #1FCEC3;
+    padding: 0.5rem;
+    color: white;
+}
+
 .signup{
     display: flex;
     justify-content: center;
@@ -15,22 +30,38 @@
     max-height: 100vw;
     width: 100vw;
     height: 100vh;
-    background-image: url("login.jpg");
     background-size: cover;
 }
-.container{
-    width: 400px;
-    height: 500px;
-    border-radius: 0.5rem;
-    background-color: rgba(255, 166, 0, 0.639);
-    backdrop-filter: blur(5px);
+.icon{
+    color: #1FCEC3;
+    font-size: large;
+}
+.label{
+    color: #1FCEC3;
+}
+.loginButton{
+    all: unset;
+    background-color:#0decdd;
     display: flex;
+    border-radius: 1.5rem;
+    width: 100%;
     justify-content: center;
     align-items: center;
+    padding: 0.5rem;
+}
+.loginButton:hover{
+    background-color: #1FCEC3;
+}
+.p1{
+    color: white;
+    text-align: center;
 }
 .h1{
     margin: 2rem;
+    text-align: center;
     font-weight: 100%;
+    color:#1FCEC3;
+    width: 100%;
 }
 .buttonContainer{
     display: flex;
@@ -43,18 +74,5 @@
     height: 0.1rem;
     background-color: black;
 }
-.loginButton{
-    padding: 0 9rem;
-    margin: -3rem;
-}
-.signupButton{
-    padding: 0 9rem;
-    margin: -3rem;
-    background-color: red;
-}
-.ExtraFunctionality{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-}
+
+

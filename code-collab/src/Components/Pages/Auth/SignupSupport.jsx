@@ -37,6 +37,18 @@ const SignupSupport = () => {
 
 
       const handleSubmit = async()=> {
+        if (!password || password.length < 8) {
+          toast.error("Password must be at least 8 characters long");
+          return;
+        }
+  
+        // Ensure the password contains at least one special character
+        const specialCharacterRegex = /[!@#$%^&*(),.?":{}|<>]/;
+        if (!specialCharacterRegex.test(password)) {
+          toast.error("Password must contain at least one special character");
+          return;
+        }
+  
         try {
           let response = await fetch("http://localhost:8080/api/v1/auth/register" , {
             method: "POST" ,

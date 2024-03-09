@@ -1,5 +1,6 @@
 const express = require("express");
 const registerController = require("../controllers/registerController.js");
+const { isLoggedIn } = require("../middleware/authMiddleware.js");
 
 const router = express.Router();
 
@@ -11,6 +12,8 @@ router.post("/login" , registerController.loginController);
 router.post("/forgotPassword" , registerController.forgotpasswordController);
 
 // private route
-router.get("/")
+router.get("/auth-user", isLoggedIn , (req , res)=> {
+    res.send({success: true});
+})
 
 module.exports = router;

@@ -18,7 +18,7 @@ const User = () => {
     }
     toast.success("Created new room successfuly");
     localStorage.setItem("user" , username);
-    navigate(`/user/${roomid}` , {
+    navigate(`/dashboard/user/${roomid}` , {
       state : username
     });
   }
@@ -66,7 +66,7 @@ const User = () => {
 
           <div className={styles.buttonGroup}>
             <button type="submit" className={styles.button}>
-              Create Room
+              Enter Room
             </button>
             <Link onClick={handleCreateId} className={styles.button}>
               Create new id
