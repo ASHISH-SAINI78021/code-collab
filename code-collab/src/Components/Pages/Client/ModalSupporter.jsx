@@ -5,13 +5,13 @@ import { useNavigate } from 'react-router-dom';
 const ReachableContext = createContext(null);
 const UnreachableContext = createContext(null);
 
-const ModalSupporter = () => {
+const ModalSupporter = ({name}) => {
   const navigate = useNavigate(); // Move the useNavigate hook here
 
   const [modal, contextHolder] = Modal.useModal();
 
   const config = {
-    title: 'Use Hook!',
+    title: 'Room',
     content: (
       <>
         <ReachableContext.Consumer>{(name) => `Are you sure you want to leave the room?`}</ReachableContext.Consumer>
@@ -36,7 +36,7 @@ const ModalSupporter = () => {
             modal.warning(config);
           }}
         >
-          Leave room
+         {name}
         </button>
       </Space>
 

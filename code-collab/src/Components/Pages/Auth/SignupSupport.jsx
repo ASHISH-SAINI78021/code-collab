@@ -1,39 +1,38 @@
-import React, { useState } from 'react';
-import { Button, Form, Input, Radio } from 'antd';
+import React, { useEffect, useState } from 'react';
 import styles from "./Auth.module.css"
-import Password from './Password';
+import{ Link} from 'react-router-dom';
 import toast  from "react-hot-toast";
 import { useNavigate } from 'react-router-dom';
+import { useTypewriter , Cursor} from 'react-simple-typewriter'
 const SignupSupport = () => {
-  const [form] = Form.useForm();
-  const [formLayout, setFormLayout] = useState('horizontal');
   const [email , setemail] = useState(null);
   const [password , setpassword] = useState(null);
   const [answer , setanswer] = useState(null);
   const navigate = useNavigate();
-  const onFormLayoutChange = ({ layout }) => {
-    setFormLayout(layout);
-  };
-  const formItemLayout =
-    formLayout === 'horizontal'
-      ? {
-          labelCol: {
-            span: 4,
-          },
-          wrapperCol: {
-            span: 14,
-          },
-        }
-      : null;
-  const buttonItemLayout =
-    formLayout === 'horizontal'
-      ? {
-          wrapperCol: {
-            span: 14,
-            offset: 4,
-          },
-        }
-      : null;
+ 
+  const [text1] = useTypewriter({
+    words: ["Code Collab Sign up"],
+    loop: 'infinite' , 
+    typeSpeed: 50,
+  });
+
+
+  const fetchCard = ()=> {
+    let cards = document.querySelectorAll(`.${styles.container2}`);
+    cards.forEach(card=> {
+      card.onmousemove = function(e){
+        let x = e.pageX - card.offsetLeft;
+        let y = e.pagey - card.offsetTop;
+
+        card.style.setProperty('--x' , x + "px");
+        card.style.setProperty('--y' , y + "px");
+      }
+    })
+  }
+
+  useEffect(()=> {
+    fetchCard();
+  })
 
 
       const handleSubmit = async()=> {
@@ -55,7 +54,7 @@ const SignupSupport = () => {
             headers : {
              "Content-Type" : "application/json"
             } ,
-            body : JSON.stringify({email , password , answer})
+            body : JSON.stringify({email , password})
           });
           console.log(response);
           if (response.ok){
@@ -75,50 +74,46 @@ const SignupSupport = () => {
         }
       }
   return (
-    <Form
-      {...formItemLayout}
-      layout={formLayout}
-      form={form}
-      initialValues={{
-        layout: formLayout,
-      }}
-      onValuesChange={onFormLayoutChange}
-      style={{
-        maxWidth: formLayout === 'inline' ? 'none' : 600,
-      }}
-    >
-        <h1 className={styles.h1}>Register</h1>
-      <Form.Item label="Email " >
-        <Input placeholder="Example@gmail.com" value={email} onChange={(event)=> setemail(event.target.value)} required />
-      </Form.Item>
-      <Form.Item label="Password: ">
-        {/* <Input placeholder="xyzQI1\23@" required /> */}
-        <Password password={password} setpassword={setpassword} onChange={(event)=> setpassword(event.target.value)} required />
-      </Form.Item>
-      <p>What is favourite dish ? </p>
-      <Form.Item label="Answer " >
-       
-        <Input placeholder="Example@gmail.com" value={answer} onChange={(event)=> setanswer(event.target.value)} required />
-      </Form.Item>
-      <Form.Item {...buttonItemLayout}>
-            <Button type="primary" className={styles.signupButton} onClick={handleSubmit}>Sign Up</Button>
-        </Form.Item>
-        <Form.Item {...buttonItemLayout}>
-            <Button type="primary" className={styles.loginButton} onClick={()=> navigate("/")}>Login</Button>
-        </Form.Item>
-      <div className={styles.buttonContainer}>
-        <div className={styles.buttonContainerItem}></div>
-        <p><b>or Signup with</b></p>
-        <div className={styles.buttonContainerItem}></div>
+    <form
+    onSubmit={(e)=> e.preventDefault()}
+    className={styles.form}
+  >
+  <h1 className={styles.h1}>{text1}<Cursor cursorColor='white' /></h1>
+    <div>
+      <div className="d-flex align-items-center gap-3" >
+        <i className={`fa-regular fa-user ${styles.icon}`}></i>
+        <input
+          type="text"
+          className={styles.inputfield}
+          placeholder="Email..."
+          value={email}
+          onChange={(event)=> setemail(event.target.value)}
+        />
       </div>
-      <div className={styles.ExtraFunctionality}>
-        <img src="google.png" alt="" />
-        <img src="facebook.png" alt="" />
-        <img src="twitter.png" alt="" />
+    </div>
+    <div>
+      <div className="d-flex align-items-center gap-3">
+        <i class={`fa-solid fa-lock ${styles.icon}`}></i>
+        <input
+          type="password"
+          className={styles.inputfield}
+          placeholder="password..."
+          value={password}
+          onChange={(event)=> setpassword(event.target.value)}
+        />
       </div>
-      
-      
-    </Form>
+    </div>
+    <div className={styles.button}>
+      <button
+        type="primary"
+        className={styles.loginButton}
+        onClick={handleSubmit}
+      >
+        Sign up
+      </button>
+    </div>
+    <p className={styles.p1}>Already has an account? <Link to="/">Login</Link></p>
+  </form>
   );
 };
 export default SignupSupport;

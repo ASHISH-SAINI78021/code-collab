@@ -10,10 +10,6 @@ const userSchema = new Schema({
         type : String ,
         required : true ,
         trim : true
-    } ,
-    answer : {
-        type : String ,
-        required : true
     } 
 } , {timestamps : true});
 

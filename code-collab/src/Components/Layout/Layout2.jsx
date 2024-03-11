@@ -1,16 +1,13 @@
 import React from 'react';
 import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import Client from '../Pages/Client/Client';
 import { useNavigate } from 'react-router-dom';
 import GroupChat from '../Pages/GroupChat/GroupChat';
 const { Header, Content, Sider } = Layout;
 import toast from "react-hot-toast";
 import { useAuth } from '../context/auth';
-const items1 = ['1', '2', '3'].map((key) => ({
-  key,
-  label: `nav ${key}`,
-}));
+import MainUser from '../Pages/User/MainUser';
+import ModalSupporter from '../Pages/Client/ModalSupporter';
 const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map((icon, index) => {
   const key = String(index + 1);
   return {
@@ -44,25 +41,6 @@ const Layout2 = ({children}) => {
   }
   return (
     <Layout>
-      <Header
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        <div className="demo-logo" />
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={['2']}
-          items={items1}
-          style={{
-            flex: 1,
-            minWidth: 0,
-           
-          }}
-        />
-      </Header>
       <Layout>
         <Sider
           width={200}
@@ -88,11 +66,25 @@ const Layout2 = ({children}) => {
         >
           <Breadcrumb
             style={{
-              margin: '16px 0',
+              margin: '16px 0', 
+              display: "flex" ,
+              justifyContent: "space-between" ,
             }}
           >
-          <button className='btn btn-danger' onClick={handleLogout}>Logout</button>
+          <div 
+            style={{
+              display: "flex" ,
+              justifyContent: "space-between" ,
+              width : "75vw"
+            }}
+          >
           <GroupChat/>
+          <div className='d-flex gap-3'>
+          <MainUser/>
+          <button className='btn btn-danger' onClick={handleLogout}>Logout</button>
+          </div>
+          
+          </div>
           </Breadcrumb>
           <Content
             style={{

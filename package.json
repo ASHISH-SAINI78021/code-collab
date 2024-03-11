@@ -8,7 +8,8 @@
     "server": "nodemon index.js",
     "client": "npm run dev --prefix ./code-collab",
     "websocket": "nodemon server.js",
-    "dev": "concurrently \"npm run server\" \" npm run websocket\" \"npm run client\" "
+    "websocket2": "nodemon server2.js",
+    "dev": "concurrently \"npm run server\" \" npm run websocket\" \"npm run client\" \"npm run websocket2\" "
   },
   "keywords": [],
   "author": "",

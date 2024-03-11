@@ -9,5 +9,5 @@ export const initSocket2 = async()=> {
         'transports' : ['websocket']
     }
 
-    return io("http://localhost:5050" , options);
+    return io("http://localhost:3000" , options);
 }

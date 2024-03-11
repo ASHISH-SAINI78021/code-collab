@@ -28,7 +28,7 @@ const Client = ({clients , roomId}) => {
       </div>
      
       <div className="d-flex gap-3">
-            <ModalSupporter/>
+            <ModalSupporter name={"Leave room"}/>
             <button className="btn btn-primary btn-sm" onClick={copyHandler}>Copy room id</button>
             <a className="btn btn-warning" style={{color:"black"}} href="https://65e89ba79b81df186142b30b--whimsical-sunflower-38afcf.netlify.app/" target="_blank" >Whiteboard</a>
         </div>

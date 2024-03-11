@@ -5,7 +5,7 @@ const JWT = require("jsonwebtoken");
 
 module.exports.registerController = async(req , res)=> {
     try {
-        const {email , password , answer} = req.body;
+        const {email , password } = req.body;
         if (!email){
             return res.send({
                 success : false ,
@@ -18,12 +18,6 @@ module.exports.registerController = async(req , res)=> {
                 message : "Password field is required"
             })
         }
-        if (!answer){
-            return res.send({
-                success : false ,
-                message : "Answer field is required"
-            })
-        }
 
         const existingUser = await User.findOne({email : email});
         if (existingUser) {
@@ -34,10 +28,9 @@ module.exports.registerController = async(req , res)=> {
         }
 
         // new user 
-        const hashedAnswer = await hashPassword(answer);
         const hashed = await hashPassword(password);
         const user = new User({
-            email , password : hashed , answer: hashedAnswer
+            email , password : hashed 
         })
 
         await user.save({ writeConcern: { w: 'majority' } });

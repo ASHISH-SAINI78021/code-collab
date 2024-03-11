@@ -3,17 +3,49 @@
     height: 100vh;
     justify-content: center;
     align-items: center;
-    gap: 40px;
     background-color: #111;
-    padding: 3rem;
+    padding: 1rem;
+    overflow: hidden;
+    flex-wrap: wrap-reverse;
 }
 .container1{
     width: 50%;
 }
+.form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+}
 .container2{
+    position: relative;
     width: 50%;
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    overflow: hidden;
 }
+.container2::before{
+    content: "";
+    position: absolute;
+    top: var(--x);
+    left: var(--y);
+    transform: translate(-50% , -50%);
+    background: radial-gradient(#1FCEC3 , transparent , transparent);
+    width: 800px;
+    height: 800px;
+    opacity: 0;
+    transition: 0.5s , top 0s , left 0s ;
+}
+
+.container2:hover::before{
+    opacity: 1;
+}
+
+
 .inputfield{
     width: 100%;
     border-radius: 1.5rem;
@@ -21,16 +53,6 @@
     border: 1px solid #1FCEC3;
     padding: 0.5rem;
     color: white;
-}
-
-.signup{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    max-height: 100vw;
-    width: 100vw;
-    height: 100vh;
-    background-size: cover;
 }
 .icon{
     color: #1FCEC3;
@@ -47,7 +69,8 @@
     width: 100%;
     justify-content: center;
     align-items: center;
-    padding: 0.5rem;
+    padding: 0.5rem 2rem;
+    margin-left: -1rem;
 }
 .loginButton:hover{
     background-color: #1FCEC3;
@@ -60,19 +83,26 @@
     margin: 2rem;
     text-align: center;
     font-weight: 100%;
+    font-size: 30px;
     color:#1FCEC3;
     width: 100%;
+    font-weight: 500;
 }
-.buttonContainer{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
+
+@media (max-width:800px) {
+    .container1{
+        width: 100%;
+    }
+    .container2{
+        width: 100%;
+    }
+    .h1{
+        font-size: 20px;
+    }
+    .loginButton{
+        margin-left: -1rem;
+    }
 }
-.buttonContainerItem{
-    width: 2rem;
-    height: 0.1rem;
-    background-color: black;
-}
+
 
 
