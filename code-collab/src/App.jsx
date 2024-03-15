@@ -29,7 +29,7 @@ function App() {
   return (
     <>
 
-      <Routes>
+<Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/" element={<Login />} />
         <Route path="dashboard/*" element={<Private />}>
@@ -46,6 +46,9 @@ function App() {
       </Routes>
     </>
   );
-}
+};
 
 export default App;
+
+
+

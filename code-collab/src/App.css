@@ -10,3 +10,6 @@
   .btn.btn-outline-success {
     padding-bottom: 20px; /* Adjust the padding values as needed */
   }
+ body{
+  overflow-y: hidden;
+ }

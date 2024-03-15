@@ -14,11 +14,7 @@ const Nav = ({onClick , editorRef}) => {
   
   <div>
     <Space.Compact block>
-        {
-            files?.map((file , index)=> {
-                return <Button key={index + 1} onClick={()=> navigate(`/main/${index + 1}`)}>{file}</Button>   
-            })
-        }
+        
       
       <Tooltip title="Download code">
         <Button icon={<DownloadOutlined />} onClick={onClick} />

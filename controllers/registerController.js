@@ -51,6 +51,7 @@ module.exports.registerController = async(req , res)=> {
 
 // login || POST
 module.exports.loginController = async(req , res)=> {
+    
     try {
         const {email , password} = req.body;
 

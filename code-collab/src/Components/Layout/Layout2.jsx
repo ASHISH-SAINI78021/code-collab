@@ -2,7 +2,7 @@ import React from 'react';
 import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import GroupChat from '../Pages/GroupChat/GroupChat';
+// import GroupChat from '../Pages/GroupChat/GroupChat';
 const { Header, Content, Sider } = Layout;
 import toast from "react-hot-toast";
 import { useAuth } from '../context/auth';
@@ -42,23 +42,7 @@ const Layout2 = ({children}) => {
   return (
     <Layout>
       <Layout>
-        <Sider
-          width={200}
-          style={{
-            backgroundColor: colorBgContainer,
-          }}
-        >
-          <Menu
-            mode="inline"
-            defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
-            style={{
-              height: '100%',
-              borderRight: 0,
-            }}
-            items={items2}
-          />
-        </Sider>
+        
         <Layout
           style={{
             padding: '0 24px 24px',
@@ -74,17 +58,19 @@ const Layout2 = ({children}) => {
           <div 
             style={{
               display: "flex" ,
-              justifyContent: "space-between" ,
-              width : "75vw"
+              justifyContent: "flex-end" ,
+              width : "90vw"
             }}
           >
-          <GroupChat/>
+          
           <div className='d-flex gap-3'>
           <MainUser/>
           <button className='btn btn-danger' onClick={handleLogout}>Logout</button>
-          </div>
+          </div>
           
           </div>
+          
+          
           </Breadcrumb>
           <Content
             style={{

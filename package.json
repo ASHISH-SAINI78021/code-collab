@@ -9,7 +9,7 @@
     "client": "npm run dev --prefix ./code-collab",
     "websocket": "nodemon server.js",
     "websocket2": "nodemon server2.js",
-    "dev": "concurrently \"npm run server\" \" npm run websocket\" \"npm run client\" \"npm run websocket2\" "
+    "dev": "concurrently \"npm run server\" \" npm run websocket\" \"npm run client\" "
   },
   "keywords": [],
   "author": "",
